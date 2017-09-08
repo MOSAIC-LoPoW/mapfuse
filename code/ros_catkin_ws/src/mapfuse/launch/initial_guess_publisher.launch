@@ -1,7 +1,0 @@
-<launch>
-	<!-- PUBLISH INITIAL GUESS POINT CLOUD ONCE -->
-	<node pkg="pcl_ros" type="pcd_to_pointcloud" name="initial_pointcloud_publisher" args="/home/michiel/SLAM/initial_guess_models/v315_v317_hall_no_ceiling.pcd">
-		<remap from="/cloud_pcd" to="/cloud_in" /> 
-		<param name="frame_id" type="string" value="/map" />
-	</node>
-</launch>
