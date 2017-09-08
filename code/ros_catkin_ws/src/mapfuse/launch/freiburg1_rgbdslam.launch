@@ -1,0 +1,11 @@
+
+<launch>
+	<param name="/use_sime_time" value="true"/>
+
+	<!-- PUBLISH RGB-D SLAM POINT CLOUD ONCE -->
+	<node pkg="pcl_ros" type="pcd_to_pointcloud" name="rgbdslam_pointcloud_publisher_freiburg" args="/home/michiel/RESULTS/freiburg1_room/rgbdslam_pointcloud.pcd">
+		<remap from="/cloud_pcd" to="/cloud_in" /> 
+		<param name="frame_id" type="string" value="/rgbdslam_map" />
+	</node>
+
+</launch>

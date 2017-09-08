@@ -1,0 +1,10 @@
+
+<launch>
+	<param name="/use_sime_time" value="true"/>
+
+	<!-- PUBLISH INITIAL GUESS POINT CLOUD ONCE -->
+	<node pkg="pcl_ros" type="pcd_to_pointcloud" name="initial_pointcloud_publisher_freiburg" args="/home/michiel/initial_guess_models/freiburg1/freiburg1_no_ceiling.pcd">
+		<remap from="/cloud_pcd" to="/cloud_in" /> 
+		<param name="frame_id" type="string" value="/initial_map" />
+	</node>
+</launch>

@@ -1,0 +1,23 @@
+<launch>
+
+	<!-- launch kinect driver -->
+	<!--<include file="$(find freenect_launch)/launch/examples/freenect-registered-xyzrgb.launch" />-->
+
+	<!-- Static transformers -->
+	<!-- Base RF -->
+	<node pkg="tf" type="static_transform_publisher" name="baserf_2_map" args="0 0 0 0 0 0 /map /base_rf 1" />
+
+	<!-- Camera -->
+	<node pkg="tf" type="static_transform_publisher" name="camera_2_base" args="0 0 -0.1 0 0.40 3.14 /base_link /camera_link 100" />
+
+	<!-- launch Dash7 listeners -->
+	<!--<include file="$(find rospyd7a)/launch/dash7_listeners_erle.launch" />-->
+
+	<!-- launch Dash7 sensors -->
+	<!--<include file="$(find rospyd7a)/launch/dash7_sensors_erle.launch" />-->
+
+	<!-- Record bagfile -->
+	<node pkg="rosbag" type="record" name="recording"
+	       args="record -o /home/michiel/bagfiles/ --split --duration=120 /dash7 /tf /tf_static /mavros/imu/data /mavros/imu/data_raw
+/mavros/imu/mag /mavros/imu/temperature /mavros/local_position/odom /mavros/local_position/pose /mavros/local_position/velocity /camera/rgb/image_raw /camera/rgb/camera_info /camera/depth/image_rect_raw /camera/depth/camera_info "/>
+</launch>
