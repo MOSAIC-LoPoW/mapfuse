@@ -6,3 +6,6 @@ MapFuse is a solution to build complete, volumetric models of an environment. Th
 * [OctoMap](https://github.com/OctoMap/octomap)
 
 ## Usage
+### Online merging
+
+### Iterative merging
