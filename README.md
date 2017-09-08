@@ -5,7 +5,7 @@ MapFuse is a solution to build complete, volumetric models of an environment. Th
 * Ubuntu 16.04
 * [ROS Kinetic](http://wiki.ros.org/kinetic/Installation/Ubuntu)
 * [RGB-D SLAM](https://github.com/felixendres/rgbdslam_v2) This package is included in our repository, as well as its installation instructions.
-* [OctoMap](http://wiki.ros.org/octomap)
+* [ros-kinetic-octomap](http://wiki.ros.org/octomap)
 
 ## Installation
 In order to work with MapFuse, we have to build a ROS workspace. Copy the ROS packages from <b>code/ros_catkin_ws/src/</b> in this repository in o your own ROS workspace. If you have already built RGB-D SLAM in your workspace, you only need to copy the mapfuse package. For more information on how to create your ROS workspace, check out [this link](http://wiki.ros.org/catkin/Tutorials/create_a_workspace). 
