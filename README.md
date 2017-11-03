@@ -59,10 +59,10 @@ The iterative method merges a finished SLAM point cloud with an initial point cl
 	```
 * Enter the amount of initial clouds that you want to include in the result.
 * Enter the amount of SLAM clouds that you want to include in the result.
-* Select in which order you want to merge the clouds
-..1. All initial clouds first
-..2. All SLAM clouds first
-..3. Alternating between initial clouds and SLAM clouds
+* Select in which order you want to merge the clouds:
+	1. All initial clouds first
+	2. All SLAM clouds first
+	3. Alternating between initial clouds and SLAM clouds
 * Enter the octomap resolution (default is 0.10)
 
 After the resolution is set, MapFuse will start merging the point clouds. You will be able to see the process in Rviz, which opens automatically. For this example, you have to change the *Fixed Frame* in Rviz to */map*, and add an *OccupancyGrid* that listens to the */octomap_full* topic.
