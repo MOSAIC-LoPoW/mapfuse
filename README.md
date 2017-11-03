@@ -19,10 +19,28 @@ MapFuse is a solution to build complete, volumetric models of an environment. Th
 
 
 ## Usage
-Our approach fuses two point clouds into a single OctoMap. We propose two methods to merge SLAM point cloud with the initial model.
+Our approach fuses two point clouds into a single OctoMap. We propose two methods to merge SLAM point cloud with the initial model. Both methods will be demonstrated using an open source RGB-D dataset.
 
 ### Online merging
-The online method merges the SLAM point cloud while it is still being built. We will demonstrate this with an example. First, download [this](https://vision.in.tum.de/rgbd/dataset/freiburg1/rgbd_dataset_freiburg1_room.bag) RGB-D dataset. It will be used as input for the SLAM algorithm.
+The online method merges the SLAM point cloud while it is still being built. We will demonstrate this with an example. 
+* First, download [this](https://vision.in.tum.de/rgbd/dataset/freiburg1/rgbd_dataset_freiburg1_room.bag) RGB-D dataset. It will be used as input for the SLAM algorithm.
+* When the *.bag* file is downloaded, run **./mapfuse_online_merge.sh**.
+* You are prompted to enter the file location of an initial point cloud. For this example, you can find the point cloud at */initial_guess_models/freiburg1/freiburg1_no_ceiling.pcd*
+* Next, enter the file location of the bagfile that you just downloaded.
+* Enter the speed at which the bagfile has to be played out (1 = real time)
+* The initial point cloud has to be aligned with the RGB-D SLAM output to get a realistic model. For this example, the parameters are (roughly):
+	```
+	x: -2.2
+	y 2.45
+	z: 0
+	r: -1.57
+	p: 0
+	yaw: 0
+	```
+* Enter the octomap resolution (default is 0.10)
 
+After the resolution is set, MapFuse will start merging the point clouds. You will be able to see the process in Rviz, which opens automatically. For this example, you have to change the *Fixed Frame* in Rviz to */world*, and add an *OccupancyGrid* that listens to the */octomap_full* topic.
+
+The result can be saved to an .ot file by opening a new terminal and executing: **rosrun octomap_server octomap_saver -f result.ot**.
 
 ### Iterative merging
