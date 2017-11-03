@@ -44,3 +44,27 @@ After the resolution is set, MapFuse will start merging the point clouds. You wi
 The result can be saved to an .ot file by opening a new terminal and executing: **rosrun octomap_server octomap_saver -f result.ot**.
 
 ### Iterative merging
+The iterative method merges a finished SLAM point cloud with an initial point cloud. You can choose how many of each has to be included in the result, and in what order.
+* Run **./mapfuse_iterative_merge.sh**.
+* You are prompted to enter the file location of an initial point cloud. For this example, you can find the point cloud at */initial_guess_models/freiburg1/freiburg1_no_ceiling.pcd*
+* Next, you are prompted to enter the file location of an SLAM point cloud. For this example, we have included a finished point cloud of the *freiburg_room1* dataset. You can find it at */examples/SLAM/freiburg_rgbdslam_pointcloud.pcd*
+* The initial point cloud has to be aligned with the RGB-D SLAM output to get a realistic model. For this example, the parameters are (roughly):
+	```
+	x: 3.3
+	y: 2.5
+	z: 0
+	r: 0
+	p: -1.57
+	yaw: 0.125
+	```
+* Enter the amount of initial clouds that you want to include in the result.
+* Enter the amount of SLAM clouds that you want to include in the result.
+* Select in which order you want to merge the clouds
+..1. All initial clouds first
+..2. All SLAM clouds first
+..3. Alternating between initial clouds and SLAM clouds
+* Enter the octomap resolution (default is 0.10)
+
+After the resolution is set, MapFuse will start merging the point clouds. You will be able to see the process in Rviz, which opens automatically. For this example, you have to change the *Fixed Frame* in Rviz to */map*, and add an *OccupancyGrid* that listens to the */octomap_full* topic.
+
+When merging is done, you are prompted to save the octomap to an .ot file.
