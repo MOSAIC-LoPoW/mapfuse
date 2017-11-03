@@ -1,0 +1,4 @@
+
+<launch>
+	<node pkg="tf" type="static_transform_publisher" name="initial_map_2_map" args="0 0 0 0 0 -1.95 /map /world 10"/>
+</launch>
