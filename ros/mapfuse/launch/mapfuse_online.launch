@@ -1,0 +1,117 @@
+<launch>
+	<param name="/use_sime_time" value="true"/>
+	<!-- DATASET ARGUMENTS -->
+	<arg name="bag"/>
+	<arg name="speed" default="1"/>
+
+	<!-- OCTOMAP ARGUMENTS -->
+	<arg name="resolution" default="0.10"/>
+
+	<!-- INITIAL GUESS ARGUMENTS -->
+	<arg name="initial"/>
+
+	<!-- RGB-D SLAM ARGUMENTS -->
+	<arg name="frame" default="/world"/>
+	<arg name="rgb_topic" default="/camera/rgb/image_color"/>
+	<arg name="depth_topic" default="/camera/depth/image"/>
+	<arg name="max_depth" default="8.0"/>
+	<arg name="min_depth" default="0.4"/>
+	<arg name="downsample" default="4"/>
+
+	<!-- ALIGNMENT ARGUMENTS -->
+	<arg name="x" default="0"/>
+	<arg name="y" default="0"/>
+	<arg name="z" default="0"/>
+	<arg name="r" default="0"/>
+	<arg name="p" default="0"/>
+	<arg name="yaw" default="0"/>
+
+
+
+<!-- OPEN RVIZ-->
+<node pkg="rviz" type="rviz" name="rviz"/>
+
+
+
+<!-- STATIC TF PUBLISHERS TO ALIGN INITIAL MAP WITH RGB-D SLAM MAP-->
+<node pkg="tf" type="static_transform_publisher" name="initial_map_2_map" args="$(arg x) $(arg y) $(arg z) $(arg r) $(arg p) $(arg yaw) $(arg frame) /initial_map 1"/>
+
+
+
+<!-- PUBLISH INITIAL GUESS POINT CLOUD ONCE -->
+<node pkg="pcl_ros" type="pcd_to_pointcloud" name="initial_pointcloud_publisher" args="$(arg initial)">
+	<remap from="/cloud_pcd" to="/cloud_in" /> 
+	<param name="frame_id" type="string" value="/initial_map" />
+</node>
+
+
+
+<!-- START OCTOMAP SERVER -->
+<node pkg="octomap_server" type="octomap_server_node" name="octomap_server">
+    <param name="resolution" value="$(arg resolution)" /> <!-- OctoMap resolution -->
+		
+	<!-- fixed map frame (set to 'map' if SLAM or localization running!) -->
+	<param name="frame_id" type="string" value="$(arg frame)" />
+	<param name="filter_ground" value="false" /><!-- who knows where the floor is? -->
+    <param name="base_frame_id" value="/base_link" /> <!--needs to be set, even if not used-->
+	<param name="sensor_model/max_range" value="-1" />
+    <!--<param name="sensor_model/hit" value="0.8" />
+    <param name="sensor_model/miss" value="0.3" />-->
+    <param name="latch" value="false" />
+</node>
+
+
+
+<!-- RUN RGB-D SLAM -->
+<node pkg="rgbdslam" type="rgbdslam" name="rgbdslam" cwd="node" required="true" output="screen"> 
+
+	<remap from="/rgbdslam/online_clouds" to="/cloud_in" />
+	
+	<!-- Input data settings-->
+		<param name="config/topic_image_mono"              value="$(arg rgb_topic)"/> 
+		<param name="config/topic_image_depth"             value="$(arg depth_topic)"/>
+		<param name="config/maximum_depth"         		value="$(arg max_depth)"/>
+		<param name="config/minimum_depth"         		value="$(arg min_depth)"/>
+		<param name="config/cloud_creation_skip_step"      value="$(arg downsample)"/>
+
+	<!-- Output data settings-->
+		<!--<param name="config/send_clouds_rate"         	value="15"/>-->
+	
+	<!-- OctoMap data settings-->
+
+	<!-- TF information settings-->
+		<param name="config/fixed_frame_name"        value="$(arg frame)"/>
+
+		
+	<!-- Visual Features-->
+		<param name="config/feature_extractor_type"        value="SIFTGPU"/>
+		<param name="config/feature_detector_type"         value="SIFTGPU"/>
+		<param name="config/matcher_type"         	value="FLANN"/>
+
+		<param name="config/max_keypoints"                 value="1000"/>
+
+		<param name="config/use_feature_mask"                   value="true"/>
+
+	<!-- Frontend settings -->
+		<param name="config/use_icp"         	value="true"/>
+		<param name="config/icp_method"         value="gicp"/>
+		<param name="config/g2o_transformation_refinement"         value="15"/>
+
+	<!-- Backend settings-->
+
+	<!-- Robot odometry options-->
+
+	<!-- Visualization Settings -->
+		<param name="/config/use_gui" value="true"/> <!-- hide/show GUI -->
+	<!-- Misc -->
+
+	<!-- Debug-->
+
+</node>
+
+
+<!-- PLAY THE DATASET -->
+<node pkg="rosbag" type="play" name="play_dataset"
+	    args="--clock $(arg bag) -r $(arg speed)"/>
+
+</launch>
